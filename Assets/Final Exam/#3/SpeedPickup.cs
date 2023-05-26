@@ -15,10 +15,33 @@ using UnityEngine;
  *      - Change the speed back to the originalSpeed
  * 
  */
-public class SpeedPickup : MonoBehaviour
+using UnityEngine;
+
+public class SpeedPickup : PickUp
 {
     public float originalSpeed;
     public float boostedSpeed;
 
+    public override void Activate()
+    {
+        base.Activate();
 
+        GameObject[] playerGameObjects = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject playerGameObject in playerGameObjects)
+        {
+            Car playerCar = playerGameObject.GetComponent<Car>();
+            if (playerCar != null)
+            {
+                originalSpeed = playerCar.moveSpeed;
+                playerCar.moveSpeed = boostedSpeed;
+                StartCoroutine(ResetSpeedAfterDelay(playerCar));
+            }
+        }
+    }
+
+    private IEnumerator ResetSpeedAfterDelay(Car car)
+    {
+        yield return new WaitForSeconds(2f);
+        car.moveSpeed = originalSpeed;
+    }
 }

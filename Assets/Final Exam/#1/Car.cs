@@ -13,23 +13,24 @@ public class Car : MonoBehaviour
     private float horizontalInput;
 
 
-    // Start is called before the first frame update
+   
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
     }
 
-   
+
     void Update()
     {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
-        /*
-         * FINAL EXAM #1
-         * Write a script that will allow movement.
-         * The Vertical Axis should make the player move forwards and backwards
-         * The Horizontal Axis should make the player rotate on the Vector3.back axis
-         */
+        Vector2 movement = new Vector2(0, moveVertical);  
+        rb.velocity = transform.up * movement.y * moveSpeed;
 
+        float rotationAmount = -moveHorizontal * turnSpeed * Time.deltaTime;
+        transform.Rotate(Vector3.forward * rotationAmount);
     }
+
 }
